@@ -35,7 +35,8 @@ function printResults(resultObj) {
     '<strong>Wind Speed:</strong> ' + resultObj.wind.speed + ' MPH' + '<br/>';
   bodyContentEl.innerHTML +=
     '<strong>Humidity:</strong> ' + resultObj.main.humidity + '%' + '<br/>';
-
+  bodyContentEl.innerHTML +=
+    '<img src="http://openweathermap.org/img/wn/' + resultObj.weather[0].icon + '.png" alt="Weather Image">' + '<br/>';  
   resultBody.append(bodyContentEl);
 
   resultContentEl.append(resultCard);
@@ -78,11 +79,9 @@ function printResults(resultObj) {
       if (!uvData.value) {
         console.log('No UV found!');
       } else {
-        console.log(`${uvData.value}`);
         resultTextEl.innerHTML = data.city.name + '<br/>'; 
         resultTextEl.innerHTML += 'Current UV Index: ' + uvData.value;
       }
-      console.log(uvData.value);
     })
     .catch(function (error) {
       console.error(error);
