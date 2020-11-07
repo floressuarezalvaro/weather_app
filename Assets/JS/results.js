@@ -30,17 +30,13 @@ function printResults(resultObj) {
   bodyContentEl.innerHTML =
     '<strong>Date:</strong> ' + resultObj.dt_txt + '<br/>';
   bodyContentEl.innerHTML +=
-    '<strong>Temperature (Fahrenheit):</strong> ' + resultObj.main.temp_max + '<br/>';
+    '<strong>Temperature:</strong> ' + resultObj.main.temp_max + ' °F' +'<br/>';
   bodyContentEl.innerHTML +=
-    '<strong>Wind Speed (MPH):</strong> ' + resultObj.wind.speed + '<br/>';
+    '<strong>Wind Speed:</strong> ' + resultObj.wind.speed + ' MPH' + '<br/>';
+  bodyContentEl.innerHTML +=
+    '<strong>Humidity:</strong> ' + resultObj.main.humidity + '%' + '<br/>';
 
-
-  var linkButtonEl = document.createElement('a');
-  linkButtonEl.textContent = 'Read More';
-  linkButtonEl.setAttribute('href', resultObj.url);
-  linkButtonEl.classList.add('btn', 'btn-dark');
-
-  resultBody.append(bodyContentEl, linkButtonEl);
+  resultBody.append(bodyContentEl);
 
   resultContentEl.append(resultCard);
 }
@@ -58,10 +54,10 @@ function printResults(resultObj) {
     })
     .then(function (locRes) {
       // write query to page so user knows what they are viewing
-      resultTextEl.textContent = locRes.city.name;
-
-      console.log(locRes);
-
+  
+      let resultLat = locRes.city.coord.lat;
+      let resultLon = locRes.city.coord.lon;
+      
       if (!locRes.list.length) {
         console.log('No results found!');
         resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
@@ -71,6 +67,22 @@ function printResults(resultObj) {
           printResults(locRes.list[i]);
         }
       }
+      data = locRes;
+
+      return fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${resultLat}&lon=${resultLon}&appid=${apiKey}`);
+    }).then(function (response) {
+      if (response.ok) {
+        return response.json();
+      }
+    }).then(function (uvData) {
+      if (!uvData.value) {
+        console.log('No UV found!');
+      } else {
+        console.log(`${uvData.value}`);
+        resultTextEl.innerHTML = data.city.name + '<br/>'; 
+        resultTextEl.innerHTML += 'Current UV Index: ' + uvData.value;
+      }
+      console.log(uvData.value);
     })
     .catch(function (error) {
       console.error(error);
