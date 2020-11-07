@@ -1,18 +1,11 @@
 var searchFormEl = document.querySelector('#search-form');
+var apiKey = "55636a3718ca098969ff6ef3cac463be";
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
 
   var cityInputVal = document.querySelector('#search-input').value;
-  var tokenzInputVal = document.querySelector('#tokenz-input').value;
-
-  if (!cityInputVal || !tokenzInputVal) {
-    console.error('You need a search input value!');
-    return;
-  }
-
-  var queryString = 'data/2.5/forecast?q=' + cityInputVal + '&appid=' + tokenzInputVal;
-
+  var queryString = './results.html?q=' + cityInputVal; 
   location.assign(queryString);
 }
 
