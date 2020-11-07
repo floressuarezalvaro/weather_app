@@ -1,8 +1,10 @@
 var resultTextEl = document.querySelector('#result-text');
 var resultContentEl = document.querySelector('#result-content');
 var searchFormEl = document.querySelector('#search-form');
+var citiesHistory = document.querySelector('#citiesHistory');
 var apiKey = "55636a3718ca098969ff6ef3cac463be";
 
+var cities = [];
 
 function getParams() {
   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
@@ -11,7 +13,6 @@ function getParams() {
   // Get the query and format values
   var city = searchParamsArr[0].split('=').pop();
   console.log(city);
-
   searchApi(city);
 }
 
@@ -79,14 +80,32 @@ function printResults(resultObj) {
       if (!uvData.value) {
         console.log('No UV found!');
       } else {
-        resultTextEl.innerHTML = data.city.name + '<br/>'; 
+        resultTextEl.innerHTML = data.city.name + '<br/>';
         resultTextEl.innerHTML += 'Current UV Index: ' + uvData.value;
+        cities.push(city)
+        city.value = "";
+        storeCities();
+        renderCities();
       }
     })
     .catch(function (error) {
       console.error(error);
     });
   }
+
+function storeCities() {
+ localStorage.setItem("Cities", JSON.stringify(cities))
+}
+function renderCities () {
+  citiesHistory.innerHTML = "";
+  for (let i = 0; i < cities.length; i++) {
+    var citiesList = cities[i];
+    var li = document.createElement("li");
+    li.innerHTML = '<a href="https://api.openweathermap.org/data/2.5/forecast?q=' + citiesList + '&appid=${apiKey}&units=imperial">' + citiesList + '</a>';
+    li.setAttribute("data-index", i);
+    citiesHistory.prepend(li);
+  }
+}
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
