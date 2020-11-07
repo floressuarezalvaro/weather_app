@@ -15,49 +15,49 @@ function getParams() {
   searchApi(city);
 }
 
-// function printResults(resultObj) {
-//   console.log(resultObj);
+function printResults(resultObj) {
+  console.log(resultObj);
 
-//   // set up `<div>` to hold result content
-//   var resultCard = document.createElement('div');
-//   resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+  // set up `<div>` to hold result content
+  var resultCard = document.createElement('div');
+  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
 
-//   var resultBody = document.createElement('div');
-//   resultBody.classList.add('card-body');
-//   resultCard.append(resultBody);
+  var resultBody = document.createElement('div');
+  resultBody.classList.add('card-body');
+  resultCard.append(resultBody);
 
-//   var titleEl = document.createElement('h3');
-//   titleEl.textContent = resultObj.title;
+  var titleEl = document.createElement('h3');
+  titleEl.textContent = resultObj.title;
 
-//   var bodyContentEl = document.createElement('p');
-//   bodyContentEl.innerHTML =
-//     '<strong>Date:</strong> ' + resultObj.date + '<br/>';
+  var bodyContentEl = document.createElement('p');
+  bodyContentEl.innerHTML =
+    '<strong>Date:</strong> ' + resultObj.date + '<br/>';
 
-//   if (resultObj.subject) {
-//     bodyContentEl.innerHTML +=
-//       '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
-//   } else {
-//     bodyContentEl.innerHTML +=
-//       '<strong>Subjects:</strong> No subject for this entry.';
-//   }
+  if (resultObj.subject) {
+    bodyContentEl.innerHTML +=
+      '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
+  } else {
+    bodyContentEl.innerHTML +=
+      '<strong>Subjects:</strong> No subject for this entry.';
+  }
 
-//   if (resultObj.description) {
-//     bodyContentEl.innerHTML +=
-//       '<strong>Description:</strong> ' + resultObj.description[0];
-//   } else {
-//     bodyContentEl.innerHTML +=
-//       '<strong>Description:</strong>  No description for this entry.';
-//   }
+  if (resultObj.description) {
+    bodyContentEl.innerHTML +=
+      '<strong>Description:</strong> ' + resultObj.description[0];
+  } else {
+    bodyContentEl.innerHTML +=
+      '<strong>Description:</strong>  No description for this entry.';
+  }
 
-//   var linkButtonEl = document.createElement('a');
-//   linkButtonEl.textContent = 'Read More';
-//   linkButtonEl.setAttribute('href', resultObj.url);
-//   linkButtonEl.classList.add('btn', 'btn-dark');
+  var linkButtonEl = document.createElement('a');
+  linkButtonEl.textContent = 'Read More';
+  linkButtonEl.setAttribute('href', resultObj.url);
+  linkButtonEl.classList.add('btn', 'btn-dark');
 
-//   resultBody.append(titleEl, bodyContentEl, linkButtonEl);
+  resultBody.append(titleEl, bodyContentEl, linkButtonEl);
 
-//   resultContentEl.append(resultCard);
-// }
+  resultContentEl.append(resultCard);
+}
 
   function searchApi(city) {
   var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
@@ -76,35 +76,28 @@ function getParams() {
 
       console.log(locRes);
 
-    //   if (!locRes.results.length) {
-    //     console.log('No results found!');
-    //     resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
-    //   } else {
-    //     resultContentEl.textContent = '';
-    //     for (var i = 0; i < locRes.results.length; i++) {
-    //       printResults(locRes.results[i]);
-    //     }
-    //   }
+      if (!locRes.list.length) {
+        console.log('No results found!');
+        resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
+      } else {
+        resultContentEl.textContent = '';
+        for (var i = 0; i < locRes.list.length; i++) {
+          printResults(locRes.list[i]);
+        }
+      }
     })
     .catch(function (error) {
       console.error(error);
     });
   }
 
-// function handleSearchFormSubmit(event) {
-//   event.preventDefault();
+function handleSearchFormSubmit(event) {
+  event.preventDefault();
+  var cityInputVal = document.querySelector('#search-input').value;
 
-//   var searchInputVal = document.querySelector('#search-input').value;
-//   // var formatInputVal = document.querySelector('#format-input').value;
+  searchApi(cityInputVal);
+}
 
-//   if (!searchInputVal) {
-//     console.error('You need a search input value!');
-//     return;
-//   }
-
-//   searchApi(searchInputVal);
-// }
-
-// searchFormEl.addEventListener('submit', handleSearchFormSubmit);
+searchFormEl.addEventListener('submit', handleSearchFormSubmit);
 
 getParams();
