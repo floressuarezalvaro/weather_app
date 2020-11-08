@@ -12,12 +12,10 @@ function getParams() {
 
   // Get the query and format values
   var city = searchParamsArr[0].split('=').pop();
-  console.log(city);
   searchApi(city);
 }
 
 function printResults(resultObj) {
-  console.log(resultObj);
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement('div');
@@ -81,11 +79,12 @@ function printResults(resultObj) {
         console.log('No UV found!');
       } else {
         resultTextEl.innerHTML = data.city.name + '<br/>';
-        resultTextEl.innerHTML += 'Current UV Index: ' + uvData.value;
+        resultTextEl.innerHTML += 'Current UV Index: ' + '<div id="data-UV">' + uvData.value + '</div>';
         cities.push(city)
         city.value = "";
         storeCities();
         renderCities();
+        
       }
     })
     .catch(function (error) {
@@ -110,7 +109,6 @@ function renderCities () {
 function handleSearchFormSubmit(event) {
   event.preventDefault();
   var cityInputVal = document.querySelector('#search-input').value;
-
   searchApi(cityInputVal);
 }
 
